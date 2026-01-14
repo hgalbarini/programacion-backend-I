@@ -20,6 +20,11 @@ const sum = async (...numbers) => {
     .catch (error => {
         console.error('There is an error', error.message)
     });
+
+
+
+   
+            
         
 
 /*Gestión de Eventos con JavaScript
