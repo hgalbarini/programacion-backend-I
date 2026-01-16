@@ -1,14 +1,17 @@
-//Falta modificar
+//Falta modificar thumbnail getter y seter para array
 
 class Product {
 
     constructor (){
         this.id = 0;
         this.title = "";
-        this.price = 0;
-        this.thumbnail = "";
+        this.description = "";
         this.code = "";
+        this.price = 0;
         this.stock = 0;
+        this.category = "";
+        this.thumbnail = [];
+        
     }
 
     setId (id){
@@ -27,20 +30,12 @@ class Product {
         return this.title;
     }
 
-    setPrice (price){
-        this.price = price;
+    setDescription (description){
+        this.description = description;
     }
 
-    getPrice () {
-        return this.price;
-    }
-
-    setThumbnail (thumbnail){
-        this.thumbnail = thumbnail;
-    }
-
-    getThumbnail () {
-        return this.thumbnail;
+    getDescription () {
+        return this.description;
     }
 
     setCode (code){
@@ -49,6 +44,30 @@ class Product {
 
     getCode () {
         return this.code;
+    }
+
+    setPrice (price){
+        this.price = price;
+    }
+
+    getPrice () {
+        return this.price;
+    }
+
+    setCategory (category){
+        this.category = category;
+    }
+
+    getCategory () {
+        return this.category;
+    }
+
+    setThumbnail (thumbnail){
+        this.thumbnail = thumbnail;
+    }
+
+    getThumbnail () {
+        return this.thumbnail;
     }
 
     setStock (stock){
