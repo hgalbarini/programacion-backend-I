@@ -22,12 +22,23 @@ class TicketManager {
     }
 
     agregarUsuario(eventId,userId){
-        eventExist = this.eventos.find(evento.id === eventId);
-        if (!eventExist) throw new Error("Evento no existe");
-        userExist = this.eventos.participantes.find(participantes.id === userId);
-        if (userExist) throw new Error("Usuario ya registrado");
-        userToAdd = new Usuario(userId);
-        this.eventos.find(evento.id === eventId).participantes.push(userToAdd);
+        let eventExist = this.eventos.find(evento => evento.id === eventId);
+        if (!eventExist) {
+            console.error(`Evento ID ${eventId} no existe`)
+            throw new Error("Evento no existe");
+        }
+        let userExist = this.eventos.forEach(evento => evento.participantes.find(participante => participante.id === userId));
+        // this.eventos.participantes.find(participante => participante.id === userId);
+        if (userExist) {
+            console.error(`User ID ${userId} ya registrado`)
+            throw new Error("Usuario ya registrado");
+        }
+        let userToAdd = new Usuario(userId);
+        this.eventos.find(evento => evento.id === eventId).participantes.push(userToAdd);
+    }
+
+    ponerEventoEnGira(eventId,lugar,fecha){
+
     }
 
 
