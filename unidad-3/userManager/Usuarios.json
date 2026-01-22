@@ -1,0 +1,35 @@
+[
+  {
+    "id": "2",
+    "nombre": "Hugo2",
+    "apellido": "Galbarini2",
+    "edad": 30,
+    "curso": [
+      "Programacion Backend",
+      "Javascript 1"
+    ],
+    "password": "123a45"
+  },
+  {
+    "id": "2",
+    "nombre": "Hugo2",
+    "apellido": "Galbarini2",
+    "edad": 30,
+    "curso": [
+      "Programacion Backend",
+      "Javascript 1"
+    ],
+    "password": "123a45"
+  },
+  {
+    "id": "2",
+    "nombre": "Hugo2",
+    "apellido": "Galbarini2",
+    "edad": 30,
+    "curso": [
+      "Programacion Backend",
+      "Javascript 1"
+    ],
+    "password": "123a45"
+  }
+]
