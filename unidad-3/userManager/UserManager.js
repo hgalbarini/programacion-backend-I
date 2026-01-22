@@ -10,6 +10,7 @@ class UserManager {
     }
 
     async addUser(user){
+
         //leer
         try {
             this.data = await fs.readFile(path,'utf-8'); //leo el archivo
@@ -28,15 +29,16 @@ class UserManager {
             console.error(`Error writing the file: ${error.message}`);
         }
 
-
-
-      /*   let userToAdd = JSON.stringify(user,null,2);
-        this.users.push(userToAdd);
-        fs.appendFile(path,this.users); */
     }
 
-    getUser(){
-
+    async getUsers(){
+        try {
+            this.data = await fs.readFile(path,'utf-8'); //leo el archivo
+            this.users = JSON.parse(this.data); //mis users actuales son los del archivo
+            return this.users; //retorno los usuarios que lei del archivo
+        } catch (error) {
+            console.error(`Error in catch from readFile: ${error.message}`);
+        }
     }
 
 }
