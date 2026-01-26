@@ -8,28 +8,6 @@
       "Programacion Backend",
       "Javascript 1"
     ],
-    "password": "123a45"
-  },
-  {
-    "id": "2",
-    "nombre": "Hugo2",
-    "apellido": "Galbarini2",
-    "edad": 30,
-    "curso": [
-      "Programacion Backend",
-      "Javascript 1"
-    ],
-    "password": "123a45"
-  },
-  {
-    "id": "2",
-    "nombre": "Hugo2",
-    "apellido": "Galbarini2",
-    "edad": 30,
-    "curso": [
-      "Programacion Backend",
-      "Javascript 1"
-    ],
-    "password": "123a45"
+    "password": "aa701bd21fdf3106d646312024278502ff2902ab3f3a888e3cc576e699ae6844"
   }
 ]

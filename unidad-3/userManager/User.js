@@ -1,9 +1,9 @@
 const crypto = require('crypto');
 
-//falta encriptar pass
 
 class User {
 
+   
 
     constructor(id,nombre,apellido,edad,cursos = [],password){
         this.id = id;
@@ -56,8 +56,14 @@ class User {
             this.curso = curso;
         }
     
+        
         setPassword(password) {
-            this.password = password;
+             console.log(`setPassword, password passed: ${password}`);
+             const hash = crypto.createHash('sha256');
+             hash.update(password);
+             let hashPassword = hash.digest('hex');
+             console.log(`setPassword, password hashed: ${hashPassword}`);
+             this.password = hashPassword
         }
 }
 

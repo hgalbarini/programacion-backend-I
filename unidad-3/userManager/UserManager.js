@@ -9,7 +9,9 @@ class UserManager {
         this.data;
     }
 
-    async addUser(user){
+    async addUser(id,nombre,apellido,edad,cursos,password){
+
+        console.log(`Password from first line in addUser: ${password}`);
 
         //leer
         try {
@@ -22,6 +24,9 @@ class UserManager {
 
         //escribir
         try{
+            let user = new User (id,nombre,apellido,edad,cursos,password);
+            console.log(`password inside try de writeFile: ${password}`);
+            user.setPassword(password);
             this.users.push(user); //agrego el current user a los que estaban en el archivo
             let dataToWrite = JSON.stringify(this.users,null,2) //lo convierto a string
             await fs.writeFile(path, dataToWrite); //lo imprimo en el archivo
