@@ -1,0 +1,10 @@
+[{
+    "id" : 1,
+    "title" : "TestTitle",
+    "description" : "TestDescription",
+    "code" : "TestCode",
+    "price" : 1,
+    "stock" : 1,
+    "category" : "TestCategory",
+    "thumbnail" : ["TestThumbnail1","TestThumbnail2"]
+}]

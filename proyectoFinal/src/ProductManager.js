@@ -1,4 +1,4 @@
-//Falta modificar
+import fs from 'fs/promises';
 
 class ProductManager {
 
@@ -6,6 +6,7 @@ class ProductManager {
         this.products = [];
         this.codeAlreadyExist = false;
         this.idExists = false;
+        this.path = 'data/products.json';
     }
 
     addProduct (Product){
@@ -14,9 +15,26 @@ class ProductManager {
         if (!this.codeAlreadyExist) this.products.push(Product);
     }
 
-    getProducts(){
-        return this.products;
+    async getProducts(){
+        try {
+            let existingProducts = await fs.readFile(this.path,'utf-8'); //leo el archivo
+            this.products = JSON.parse(existingProducts); // mis products actuales son ahora los que ya estaban en el archivo
+            return this.products
+        } catch (error){
+            console.error (`Error in getProducts: ${error.message}`)
+        }
+        
     }
+
+    /* async getUsers(){
+        try {
+            this.data = await fs.readFile(path,'utf-8'); //leo el archivo
+            this.users = JSON.parse(this.data); //mis users actuales son los del archivo
+            return this.users; //retorno los usuarios que lei del archivo
+        } catch (error) {
+            console.error(`Error in catch from readFile: ${error.message}`);
+        }
+    } */
 
     getProductById(id){
         this.idExists = this.products.some(product => product.getId() === id);
@@ -32,7 +50,7 @@ class ProductManager {
 
 }
 
-module.exports = ProductManager;
+export default ProductManager
 
 
 /*Actividad Práctica: Clases con ECMAScript y ECMAScript Avanzado

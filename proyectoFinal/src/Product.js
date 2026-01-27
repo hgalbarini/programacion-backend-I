@@ -80,6 +80,7 @@ class Product {
 
 }
 
+export default Product
 /*
 title: String
 

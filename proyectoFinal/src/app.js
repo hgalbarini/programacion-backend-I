@@ -1,16 +1,18 @@
 import express, { Router } from "express";
-/* import CartManager from "./CartManager.js";
+/* import CartManager from "./CartManager.js";*/
 import Product from "./Product.js";
-import ProductManager from "./ProductManager.js"; */
+import ProductManager from "./ProductManager.js"; 
 
 const app = express();
 const PORT = 8080;
-
+let productManager = new ProductManager();
 app.use(express.json());
 
 app.get('/api/products', (req,res) => {
-    console.log(`Api products`);
-    res.json(['hola']);
+    console.log(`get /api/products`);
+    let products = productManager.getProducts();
+    products.then(product => res.json(product));
+    
 })
 
 app.listen(PORT);
