@@ -1,4 +1,20 @@
-Entrega N° 1
+import express, { Router } from "express";
+/* import CartManager from "./CartManager.js";
+import Product from "./Product.js";
+import ProductManager from "./ProductManager.js"; */
+
+const app = express();
+const PORT = 8080;
+
+app.use(express.json());
+
+app.get('/api/products', (req,res) => {
+    console.log(`Api products`);
+    res.json(['hola']);
+})
+
+app.listen(PORT);
+/*Entrega N° 1
 Descripción General
 Desarrollar un servidor que contenga los endpoints y servicios necesarios para gestionar los productos y carritos de compra para tu API.
 
@@ -106,4 +122,4 @@ quantity de dicho producto.
 Persistencia de la Información
 La persistencia se implementará utilizando el sistema de archivos, donde los archivos products.json y carts.json respaldarán la información.
 Se debe utilizar el ProductManager desarrollado en el desafío anterior y crear un CartManager para gestionar el almacenamiento de estos archivos JSON.
- •  • Nota: No es necesario realizar ninguna implementación visual, todo el flujo se puede realizar por Postman o por el cliente de tu preferencia.
+ •  • Nota: No es necesario realizar ninguna implementación visual, todo el flujo se puede realizar por Postman o por el cliente de tu preferencia.*/
