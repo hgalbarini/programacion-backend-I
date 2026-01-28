@@ -8,11 +8,23 @@ const PORT = 8080;
 let productManager = new ProductManager();
 app.use(express.json());
 
+//este ya anda
 app.get('/api/products', (req,res) => {
     console.log(`get /api/products`);
     let products = productManager.getProducts();
     products.then(product => res.json(product));
     
+})
+
+app.post('/api/products', (req,res) => {
+    console.log(`post /api/products`);
+    try{
+        productManager.addProduct(req.body.id,req.body.title,req.body.description,req.body.code,req.body.price,req.body.stock,req.body.category,req.body.thumbnail);
+        res.json({status: "Success"});  
+    } catch (error) {
+        res.json({status: "Error", error: `${error}`})
+    }
+      
 })
 
 app.listen(PORT);

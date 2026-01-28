@@ -1,10 +1,81 @@
-[{
-    "id" : 1,
-    "title" : "TestTitle",
-    "description" : "TestDescription",
-    "code" : "TestCode",
-    "price" : 1,
-    "stock" : 1,
-    "category" : "TestCategory",
-    "thumbnail" : ["TestThumbnail1","TestThumbnail2"]
-}]
+[
+  {
+    "id": 1,
+    "title": "TestTitle",
+    "description": "TestDescription",
+    "code": "TestCode",
+    "price": 1,
+    "stock": 1,
+    "category": "TestCategory",
+    "thumbnail": [
+      "TestThumbnail1",
+      "TestThumbnail2"
+    ]
+  },
+  {
+    "id": 0,
+    "title": "",
+    "description": "",
+    "code": "",
+    "price": 0,
+    "stock": 0,
+    "category": "",
+    "thumbnail": []
+  },
+  {
+    "id": 0,
+    "title": "",
+    "description": "",
+    "code": "",
+    "price": 0,
+    "stock": 0,
+    "category": "",
+    "thumbnail": []
+  },
+  {
+    "id": 0,
+    "title": "",
+    "description": "",
+    "code": "",
+    "price": 0,
+    "stock": 0,
+    "category": "",
+    "thumbnail": []
+  },
+  {
+    "id": 0,
+    "title": "",
+    "description": "",
+    "code": "",
+    "price": 0,
+    "stock": 0,
+    "category": "",
+    "thumbnail": []
+  },
+  {
+    "id": 2,
+    "title": "TestTitl2",
+    "description": "TestDescription2",
+    "code": "TestCode2",
+    "price": 12,
+    "stock": 12,
+    "category": "TestCategory2",
+    "thumbnail": [
+      "TestThumbnail12",
+      "TestThumbnail22"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "TestTitl2",
+    "description": "TestDescription2",
+    "code": "TestCode2",
+    "price": 12,
+    "stock": 12,
+    "category": "TestCategory2",
+    "thumbnail": [
+      "TestThumbnail12",
+      "TestThumbnail22"
+    ]
+  }
+]

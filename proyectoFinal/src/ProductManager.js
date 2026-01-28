@@ -1,4 +1,5 @@
 import fs from 'fs/promises';
+import Product from './Product.js';
 
 class ProductManager {
 
@@ -9,11 +10,27 @@ class ProductManager {
         this.path = 'data/products.json';
     }
 
-    addProduct (Product){
-        this.codeAlreadyExist = this.products.some(product => product.getCode() === Product.getCode());
-        console.log(`Code ${Product.getCode()} from ${Product.getTitle()} already exist? ${this.codeAlreadyExist}`);
-        if (!this.codeAlreadyExist) this.products.push(Product);
+    async addProduct (id,title,description,code,price,stock,category,thumbnail){
+
+        //leer
+        try{
+            let existingProducts = await fs.readFile(this.path,'utf-8'); //leo el archivo
+            this.products = JSON.parse(existingProducts); // mis products actuales son ahora los que ya estaban en el archivo
+        }catch (error){
+            console.error (`Error in read file from addProduct: ${error.message}`)
+        }
+
+        //escribir
+        try {
+            let product = new Product(id,title,description,code,price,stock,category,thumbnail);
+            this.products.push(product); //agrego el current product a los que estaban en el archivo
+            let dataToWrite = JSON.stringify(this.products,null,2) //lo convierto a string
+            await fs.writeFile(this.path, dataToWrite); //lo imprimo en el archivo
+        }catch(error) {
+            console.error(`Error writing the file in addProduct: ${error.message}`);
+        }
     }
+
 
     async getProducts(){
         try {
