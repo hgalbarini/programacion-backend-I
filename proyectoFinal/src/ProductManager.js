@@ -43,26 +43,19 @@ class ProductManager {
         
     }
 
-    /* async getUsers(){
-        try {
-            this.data = await fs.readFile(path,'utf-8'); //leo el archivo
-            this.users = JSON.parse(this.data); //mis users actuales son los del archivo
-            return this.users; //retorno los usuarios que lei del archivo
-        } catch (error) {
-            console.error(`Error in catch from readFile: ${error.message}`);
-        }
-    } */
+    async getProductById(id){
 
-    getProductById(id){
-        this.idExists = this.products.some(product => product.getId() === id);
-        if (!this.idExists) {
-            console.error(`Id ${id} not found.`)
-        } 
-        else {
-            const productFound = this.products.find(product => product.getId() === id);
-            console.log(`Returning product ${productFound.getTitle()}`);
-            return productFound;
-        } 
+        try {
+            let existingProducts = await fs.readFile(this.path,'utf-8'); //leo el archivo
+            this.products = JSON.parse(existingProducts); // mis products actuales son ahora los que ya estaban en el archivo
+            return this.products;
+        } catch (error){
+            console.error (`Error in getProductsById: ${error.message}`)
+        }
+
+        
+             
+
     }
 
 }
