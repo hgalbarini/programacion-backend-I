@@ -48,7 +48,10 @@ class ProductManager {
         try {
             let existingProducts = await fs.readFile(this.path,'utf-8'); //leo el archivo
             this.products = JSON.parse(existingProducts); // mis products actuales son ahora los que ya estaban en el archivo
-            return this.products;
+            //const productExists = this.products.some(product => product.id == id);
+            //console.log(`productExists: ${productExists}`);
+            const productToReturn = this.products.find(product => product.id == id);
+            return productToReturn;
         } catch (error){
             console.error (`Error in getProductsById: ${error.message}`)
         }

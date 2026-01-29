@@ -16,28 +16,21 @@ app.get('/api/products', (req,res) => {
     
 })
 
-//falta, no se como agarrar el producto que matchea el ID
+//
 app.get('/api/products/:id', (req,res) => {
     console.log(`get /api/products/:id`);
     const {id} = req.params;
     let productToReturn = productManager.getProductById(id);
-
-    console.log(`productToReturn: ${productToReturn}`); // es una promise
-    console.log(`ahora logueo productToReturn.then: `);
-    productToReturn.then(product => console.log(product));
-    /* let idExists = false; //productToReturn.some(product => product.getId() === id); //chequeo si id existe ya
-    if (!idExists) {
-        throw Error (`Id ${id} not found.`);
-        res.json(productToReturn);
-    } 
-    else {
-        const productFound = this.products.find(product => product.getId() === id);
-        console.log(`Returning product from getProductById ${productFound.getTitle()}`);
-        return productFound;
-    }   */
-
-    res.json("Success");
-})
+    productToReturn.then(product => {
+        if (product) {
+            res.json(product)
+        } else {
+            throw new Error (`Product not found with id: ${id}`);
+        }
+    }).catch(error => {
+        res.status(404).json({success: false, error: error.message});
+    }) 
+    })
 
 //este ya anda
 app.post('/api/products', (req,res) => {
