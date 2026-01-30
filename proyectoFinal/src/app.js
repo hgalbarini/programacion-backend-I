@@ -1,156 +1,132 @@
 import express from "express";
-/* import CartManager from "./CartManager.js";*/
+import CartManager from "./CartManager.js";
 import Product from "./Product.js";
 import ProductManager from "./ProductManager.js"; 
 
 const app = express();
 const PORT = 8080;
 let productManager = new ProductManager();
+let cartManager = new CartManager();
 app.use(express.json());
 
-//este ya anda
-app.get('/api/products', (req,res) => {
+
+// PRODUCT ROUTES
+
+app.get('/api/products', async (req,res) => {
     console.log(`get /api/products`);
-    let products = productManager.getProducts();
-    products.then(product => res.json(product));
-    
-})
-
-//
-app.get('/api/products/:id', (req,res) => {
-    console.log(`get /api/products/:id`);
-    const {id} = req.params;
-    let productToReturn = productManager.getProductById(id);
-    productToReturn.then(product => {
-        if (product) {
-            res.json(product)
-        } else {
-            throw new Error (`Product not found with id: ${id}`);
-        }
-    }).catch(error => {
-        res.status(404).json({success: false, error: error.message});
-    }) 
-    })
-
-//este ya anda
-app.post('/api/products', (req,res) => {
-    console.log(`post /api/products`);
-    try{
-        productManager.addProduct(req.body.id,req.body.title,req.body.description,req.body.code,req.body.price,req.body.stock,req.body.category,req.body.thumbnail);
-        res.json({status: "Success"});  
+    try {
+        let products = await productManager.getProducts();
+        res.json(products);
     } catch (error) {
-        res.json({status: "Error", error: `${error}`})
+        res.status(500).json({success: false, error: error.message});
     }
-      
 })
 
-app.listen(PORT);
-/*Entrega N° 1
-Descripción General
-Desarrollar un servidor que contenga los endpoints y servicios necesarios para gestionar los productos y carritos de compra para tu API.
+app.get('/api/products/:pid', async (req,res) => {
+    console.log(`get /api/products/:pid`);
+    const {pid} = req.params;
+    try {
+        let product = await productManager.getProductById(pid);
+        if (product) {
+            res.json(product);
+        } else {
+            throw new Error(`Product not found with id: ${pid}`);
+        }
+    } catch (error) {
+        res.status(404).json({success: false, error: error.message});
+    }
+})
 
-Requisitos de la Primera Entrega
-Desarrollo del Servidor
-El servidor debe estar basado en Node.js y Express, y debe escuchar en el puerto 8080. Se deben disponer dos grupos de rutas: /products y /carts. Estos endpoints estarán implementados con el router de Express, con las siguientes especificaciones:
+app.post('/api/products', async (req,res) => {
+    console.log(`post /api/products`);
+    try {
+        const { title, description, code, price, stock, category, thumbnails, status } = req.body;
+        
+        // Validar que los campos requeridos estén presentes
+        if (!title || !description || !code || !price || !stock || !category) {
+            throw new Error("Missing required fields: title, description, code, price, stock, category");
+        }
 
-Rutas para Manejo de Productos (/api/products/)
-GET /:
-Debe listar todos los productos de la base de datos.
+        // El ID se autogenera, no se acepta del body
+        await productManager.addProduct(title, description, code, price, stock, category, thumbnails || [], status !== undefined ? status : true);
+        res.json({status: "Success", message: "Product added successfully"});  
+    } catch (error) {
+        res.status(400).json({status: "Error", error: error.message});
+    }
+})
 
+app.put('/api/products/:pid', async (req,res) => {
+    console.log(`put /api/products/:pid`);
+    const {pid} = req.params;
+    try {
+        // No permitir actualizar el ID
+        if (req.body.id) {
+            delete req.body.id;
+        }
 
-GET /:pid:
-Debe traer solo el producto con el id proporcionado.
+        const updatedProduct = await productManager.updateProduct(pid, req.body);
+        res.json({status: "Success", product: updatedProduct});
+    } catch (error) {
+        res.status(400).json({status: "Error", error: error.message});
+    }
+})
 
+app.delete('/api/products/:pid', async (req,res) => {
+    console.log(`delete /api/products/:pid`);
+    const {pid} = req.params;
+    try {
+        await productManager.deleteProduct(pid);
+        res.json({status: "Success", message: `Product with id ${pid} deleted successfully`});
+    } catch (error) {
+        res.status(404).json({status: "Error", error: error.message});
+    }
+})
 
-POST /:
-Debe agregar un nuevo producto con los siguientes campos:
-id: Number/String (No se manda desde el body, se autogenera para asegurar que nunca se repitan los ids).
+// CART ROUTES
 
-title: String
+app.post('/api/carts', async (req,res) => {
+    console.log(`post /api/carts`);
+    try {
+        const newCart = await cartManager.createCart();
+        res.json({status: "Success", cart: newCart});
+    } catch (error) {
+        res.status(500).json({status: "Error", error: error.message});
+    }
+})
 
-description: String
+app.get('/api/carts/:cid', async (req,res) => {
+    console.log(`get /api/carts/:cid`);
+    const {cid} = req.params;
+    try {
+        const cart = await cartManager.getCartById(cid);
+        res.json({status: "Success", cart: cart});
+    } catch (error) {
+        res.status(404).json({status: "Error", error: error.message});
+    }
+})
 
-code: String
+app.post('/api/carts/:cid/product/:pid', async (req,res) => {
+    console.log(`post /api/carts/:cid/product/:pid`);
+    const {cid, pid} = req.params;
+    try {
+        // Verificar que el producto exista
+        const product = await productManager.getProductById(pid);
+        if (!product) {
+            throw new Error(`Product with id ${pid} not found`);
+        }
 
-price: Number
+        // Verificar que el producto esté activo
+        if (product.status === false) {
+            throw new Error(`Product with id ${pid} is not available`);
+        }
 
-status: Boolean
+        const updatedCart = await cartManager.addProductToCart(cid, pid);
+        res.json({status: "Success", cart: updatedCart});
+    } catch (error) {
+        res.status(400).json({status: "Error", error: error.message});
+    }
+})
 
-stock: Number
-
-category: String
-
-thumbnails: Array de Strings (rutas donde están almacenadas las imágenes del producto).
-
-
-
-PUT /:pid:
-Debe actualizar un producto por los campos enviados desde el body. No se debe actualizar ni eliminar el idal momento de hacer la actualización.
-
-
-DELETE /:pid:
-Debe eliminar el producto con el pid indicado.
-
-
-Rutas para Manejo de Carritos (/api/carts/)
-POST /:
-Debe crear un nuevo carrito con la siguiente estructura:
-id: Number/String (Autogenerado para asegurar que nunca se dupliquen los ids).
-
-products: Array que contendrá objetos que representen cada producto.
-
-
-
-GET /:cid:
-Debe listar los productos que pertenecen al carrito con el cid proporcionado.
-
-
-POST /:cid/product/:pid:
-Debe agregar el producto al arreglo products del carrito seleccionado, utilizando el siguiente formato:
-product: Solo debe contener el ID del producto.
-
-quantity: Debe contener el número de ejemplares de dicho producto (se agregará de uno en uno).
-
-
-Si un producto ya existente intenta agregarse, se debe incrementar el campo quantity de dicho producto.
-
-
-Persistencia de la Información
-La persistencia se implementará utilizando el sistema de archivos, donde los archivos products.json y carts.json respaldarán la información.
-
-Se debe utilizar el ProductManager desarrollado en el desafío anterior y crear un CartManager para gestionar el almacenamiento de estos archivos JSON.
-
-Nota: No es necesario realizar ninguna implementación visual, todo el flujo se puede realizar por Postman o por el cliente de tu preferencia.
-
-Formato del Entregable
-Proporcionar un enlace al repositorio de GitHub con el proyecto completo, sin la carpeta node_modules.
-
-
-
----
-entrega1
-Consigna:
-Desarrollar un servidor que contenga los endpoints y servicios necesarios para gestionar los productos y carritos de compra para tu API.
-Requisitos de la Primera Entrega
-Desarrollo del Servidor
-El servidor debe estar basado en Node.js y Express, y debe escuchar en el puerto 
-8080. Se deben disponer dos grupos de rutas: /products y /carts. Estos endpoints estarán implementados con el router de Express, con las siguientes especificaciones:
- 
-(Tutor) Amadeo Isella (26 Jan 2026, 22:32)
-Rutas para Manejo de Carritos (/api/carts/)
-POST /:
-Debe crear un nuevo carrito con la siguiente estructura:
-id: Number/String (Autogenerado para asegurar que nunca se dupliquen los ids).
-products: Array que contendrá objetos que representen cada producto.
-GET /:cid:
-Debe listar los productos que pertenecen al carrito con el cid proporcionado.
-POST /:cid/product/:pid:
-Debe agregar el producto al arreglo products del carrito seleccionado, utilizando el siguiente formato:
-product: Solo debe contener el ID del producto.
-quantity: Debe contener el número de ejemplares de dicho producto (se agregará de uno en uno).
- •  • Si un producto ya existente intenta agregarse, se debe incrementar el campo 
-quantity de dicho producto.
-Persistencia de la Información
-La persistencia se implementará utilizando el sistema de archivos, donde los archivos products.json y carts.json respaldarán la información.
-Se debe utilizar el ProductManager desarrollado en el desafío anterior y crear un CartManager para gestionar el almacenamiento de estos archivos JSON.
- •  • Nota: No es necesario realizar ninguna implementación visual, todo el flujo se puede realizar por Postman o por el cliente de tu preferencia.*/
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});

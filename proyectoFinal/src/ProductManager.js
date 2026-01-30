@@ -5,108 +5,152 @@ class ProductManager {
 
     constructor (){
         this.products = [];
-        this.codeAlreadyExist = false;
-        this.idExists = false;
         this.path = 'data/products.json';
+        this.nextId = 1;
     }
 
-    async addProduct (id,title,description,code,price,stock,category,thumbnail){
 
-        //leer
-        try{
-            let existingProducts = await fs.readFile(this.path,'utf-8'); //leo el archivo
-            this.products = JSON.parse(existingProducts); // mis products actuales son ahora los que ya estaban en el archivo
-        }catch (error){
-            console.error (`Error in read file from addProduct: ${error.message}`)
+    async initialize() {
+        try {
+            let existingProducts = await fs.readFile(this.path, 'utf-8');
+            this.products = JSON.parse(existingProducts);
+            if (this.products.length > 0) {
+                // Encontrar el máximo ID actual
+                const maxId = Math.max(...this.products.map(p => parseInt(p.id)));
+                this.nextId = maxId + 1;
+            }
+        } catch (error) {
+            console.error(`Error initializing ProductManager: ${error.message}`);
+            // Si el archivo no existe, crearlo con array vacío
+            await this.saveProducts();
+        }
+    }
+
+    async saveProducts() {
+        try {
+            let dataToWrite = JSON.stringify(this.products, null, 2);
+            await fs.writeFile(this.path, dataToWrite);
+        } catch(error) {
+            console.error(`Error saving products: ${error.message}`);
+        }
+    }
+
+    async addProduct(title, description, code, price, stock, category, thumbnails = [], status = true){
+        
+        // Leer productos existentes
+        try {
+            await this.initialize();
+        } catch (error) {
+            console.error(`Error reading file in addProduct: ${error.message}`);
+            return false;
         }
 
-        //escribir
+        // Validar campos obligatorios
+        if (!title || !description || !code || !price || !stock || !category) {
+            console.error("All fields are mandatory (title, description, code, price, stock, category)");
+            throw new Error("All fields are mandatory");
+        }
+
+        // Validar que no se repita el código
+        const codeExists = this.products.some(product => product.code === code);
+        if (codeExists) {
+            console.error(`Product with code ${code} already exists`);
+            throw new Error(`Product with code ${code} already exists`);
+        }
+
+        // Crear producto con ID autoincremental
+        const id = this.nextId++;
+        let product = new Product(id, title, description, code, price, stock, category, thumbnails, status);
+        
+        this.products.push(product);
+        
         try {
-            let product = new Product(id,title,description,code,price,stock,category,thumbnail);
-            this.products.push(product); //agrego el current product a los que estaban en el archivo
-            let dataToWrite = JSON.stringify(this.products,null,2) //lo convierto a string
-            await fs.writeFile(this.path, dataToWrite); //lo imprimo en el archivo
-        }catch(error) {
+            await this.saveProducts();
+            return true;
+        } catch(error) {
             console.error(`Error writing the file in addProduct: ${error.message}`);
+            return false;
         }
     }
 
 
     async getProducts(){
         try {
-            let existingProducts = await fs.readFile(this.path,'utf-8'); //leo el archivo
-            this.products = JSON.parse(existingProducts); // mis products actuales son ahora los que ya estaban en el archivo
-            return this.products
+            await this.initialize();
+            return this.products;
         } catch (error){
-            console.error (`Error in getProducts: ${error.message}`)
+            console.error (`Error in getProducts: ${error.message}`);
+            return [];
         }
-        
     }
 
     async getProductById(id){
-
         try {
-            let existingProducts = await fs.readFile(this.path,'utf-8'); //leo el archivo
-            this.products = JSON.parse(existingProducts); // mis products actuales son ahora los que ya estaban en el archivo
-            //const productExists = this.products.some(product => product.id == id);
-            //console.log(`productExists: ${productExists}`);
-            const productToReturn = this.products.find(product => product.id == id);
-            return productToReturn;
+            await this.initialize();
+            const productExists = this.products.some(product => product.id == id);
+            if (productExists) {
+                const productToReturn = this.products.find(product => product.id == id);
+                return productToReturn;
+            } else {
+                console.error("Not found");
+                throw new Error (`Product not found with id: ${id}`);
+            }
         } catch (error){
-            console.error (`Error in getProductsById: ${error.message}`)
+            throw error;
         }
-
-        
-             
-
     }
 
+    async updateProduct(id, updatedFields) {
+        try {
+            await this.initialize();
+            const index = this.products.findIndex(product => product.id == id);
+            
+            if (index === -1) {
+                throw new Error(`Product not found with id: ${id}`);
+            }
+
+            // No permitir actualizar el ID
+            if (updatedFields.id) {
+                delete updatedFields.id;
+            }
+
+            // Validar que no se repita el código (si se está actualizando)
+            if (updatedFields.code) {
+                const codeExists = this.products.some(
+                    (product, i) => i !== index && product.code === updatedFields.code
+                );
+                if (codeExists) {
+                    throw new Error(`Product with code ${updatedFields.code} already exists`);
+                }
+            }
+
+            // Actualizar el producto
+            this.products[index] = { ...this.products[index], ...updatedFields };
+            
+            await this.saveProducts();
+            return this.products[index];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteProduct(id) {
+        try {
+            await this.initialize();
+            const index = this.products.findIndex(product => product.id == id);
+            
+            if (index === -1) {
+                throw new Error(`Product not found with id: ${id}`);
+            }
+
+            this.products.splice(index, 1);
+            
+            await this.saveProducts();
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default ProductManager
-
-
-/*Actividad Práctica: Clases con ECMAScript y ECMAScript Avanzado
-Las actividades prácticas estan pensadas para que llevar a la práctica los temas vistos en la Unidad.
-
-¿Por qué son importantes? Porque te ayudan a ir construyendo tu proyecto final.
-
-Recomendamos que las realices a medida que avanzas en el curso.
-
-Consigna
-Crear una clase llamada ProductManager que gestione un conjunto de productos.
-
-Aspectos a Incluir
-La clase debe crearse desde su constructor con el elemento products, el cual será un arreglo vacío.
-
-Cada producto gestionado debe contar con las siguientes propiedades:
-title (nombre del producto)
-
-description (descripción del producto)
-
-price (precio)
-
-thumbnail (ruta de imagen)
-
-code (código identificador)
-
-stock (número de piezas disponibles)
-
-
-Métodos a Implementar
-addProduct
-Este método debe agregar un producto al arreglo de productos inicial.
-
-Debe validar que no se repita el campo code y que todos los campos sean obligatorios.
-
-Al agregar un producto, debe crearse con un id autoincrementable.
-
-
-getProducts
-Este método debe devolver el arreglo con todos los productos creados hasta el momento.
-
-
-getProductById
-Este método debe buscar en el arreglo el producto que coincida con el id.
-
-En caso de no encontrar ningún id coincidente, debe mostrar en consola el error "Not found".*/

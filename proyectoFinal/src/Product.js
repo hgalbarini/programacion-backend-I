@@ -1,8 +1,6 @@
-//Falta modificar thumbnail getter y seter para array
-
 class Product {
 
-    constructor (id,title,description,code,price,stock,category,thumbnail){
+    constructor (id,title,description,code,price,stock,category,thumbnails,status = true){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -10,8 +8,8 @@ class Product {
         this.price = price;
         this.stock = stock;
         this.category = category;
-        this.thumbnail = thumbnail;
-        
+        this.thumbnails = thumbnails;
+        this.status = status;
     }
 
     setId (id){
@@ -62,12 +60,12 @@ class Product {
         return this.category;
     }
 
-    setThumbnail (thumbnail){
-        this.thumbnail = thumbnail;
+    setThumbnails (thumbnails){
+        this.thumbnails = thumbnails;
     }
 
-    getThumbnail () {
-        return this.thumbnail;
+    getThumbnails () {
+        return this.thumbnails;
     }
 
     setStock (stock){
@@ -78,23 +76,14 @@ class Product {
         return this.stock;
     }
 
+    setStatus (status){
+        this.status = status;
+    }
+
+    getStatus () {
+        return this.status;
+    }
+
 }
 
 export default Product
-/*
-title: String
-
-description: String
-
-code: String
-
-price: Number
-
-status: Boolean
-
-stock: Number
-
-category: String
-
-thumbnails: Array de Strings (rutas donde están almacenadas las imágenes del producto).
-*/
