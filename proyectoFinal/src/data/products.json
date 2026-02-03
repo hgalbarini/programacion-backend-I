@@ -30,16 +30,6 @@
     "thumbnail": []
   },
   {
-    "id": 0,
-    "title": "",
-    "description": "",
-    "code": "",
-    "price": 0,
-    "stock": 0,
-    "category": "",
-    "thumbnail": []
-  },
-  {
     "id": 2,
     "title": "TestTitl2",
     "description": "TestDescription2",
@@ -70,6 +60,17 @@
     "title": "Nuevo Producto",
     "description": "Descripción del nuevo producto",
     "code": "CODE123",
+    "price": 99.99,
+    "stock": 50,
+    "category": "Electrónica",
+    "thumbnails": [],
+    "status": true
+  },
+  {
+    "id": 22334,
+    "title": "Nuevo Producto",
+    "description": "Descripción del nuevo producto",
+    "code": "CODE1222223",
     "price": 99.99,
     "stock": 50,
     "category": "Electrónica",
