@@ -1,16 +1,22 @@
 import express from "express";
 import CartManager from "./CartManager.js";
-import Product from "./Product.js";
 import ProductManager from "./ProductManager.js"; 
 import cartsRouter from "./routes/carts.routes.js";
 import productsRouter from "./routes/products.routes.js";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = 8080;
 let productManager = new ProductManager();
 let cartManager = new CartManager();
 app.use(express.json());
+app.use(express.static(path.join(__dirname,'..','public')));
 
 
 // PRODUCT ROUTES

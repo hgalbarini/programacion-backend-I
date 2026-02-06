@@ -76,5 +76,38 @@
     "category": "Electrónica",
     "thumbnails": [],
     "status": true
+  },
+  {
+    "id": 22335,
+    "title": "hugp",
+    "description": "test",
+    "code": "test",
+    "price": "1",
+    "stock": "1",
+    "category": "hola",
+    "thumbnails": [],
+    "status": true
+  },
+  {
+    "id": 22336,
+    "title": "hola",
+    "description": "test",
+    "code": "test2222323",
+    "price": "22",
+    "stock": "22",
+    "category": "test2222323",
+    "thumbnails": [],
+    "status": true
+  },
+  {
+    "id": 22337,
+    "title": "hola",
+    "description": "test",
+    "code": "test2222323e",
+    "price": "22",
+    "stock": "22",
+    "category": "test2222323",
+    "thumbnails": [],
+    "status": true
   }
 ]

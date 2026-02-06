@@ -1,6 +1,7 @@
 import express from 'express'
 import CartManager from '../CartManager.js'
 import ProductManager from "../ProductManager.js"; 
+import {upload} from '../utils/utils.js';
 
 
 const router = express.Router();
@@ -34,8 +35,12 @@ router.get('/:pid', async (req,res) => {
     }
 })
 
-router.post('/', async (req,res) => {
+router.post('/', upload.single('productImage'), async (req,res) => {
     console.log(`post /api/products`);
+    console.log('POST /api/products received');
+    console.log('Content-Type header:', req.headers['content-type']);
+    console.log('Request body:', req.body);
+    console.log('Body type:', typeof req.body);
     try {
         const { title, description, code, price, stock, category, thumbnails, status } = req.body;
         
