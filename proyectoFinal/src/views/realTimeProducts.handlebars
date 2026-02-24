@@ -1,11 +1,30 @@
 <div>
     <h1> realtimeproducts Bienvenido  👋</h1>
     <hr>
-
-    <ul>
+    <ul id="productsList">
     {{#each products}}
         <li> {{this.title}} - ${{this.price}} </li>
     {{/each}}
     </ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const productsList = document.getElementById('productsList');
+
+        socket.on('updateProducts', (data) => {
+            console.log("Recibida actualización:", data);
+            
+            // Limpiamos la lista actual
+            productsList.innerHTML = '';
+
+            // Recorremos el array que llega por socket y creamos los nuevos <li>
+            data.forEach(prod => {
+                const li = document.createElement('li');
+                li.textContent = `${prod.title} - $${prod.price}`;
+                productsList.appendChild(li);
+            });
+        });
+    </script>
 
 </div>

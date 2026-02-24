@@ -10,10 +10,15 @@ const cartManager = new CartManager();
 
 let productManager = new ProductManager();
 
+router.get('/home', async (req,res) => {
+    console.log('realtimeproducts');
+    let data = await productManager.getProducts();
+    res.render('home', { products: data });
+}) 
+
 router.get('/realtimeproducts', async (req,res) => {
     console.log('realtimeproducts');
     let data = await productManager.getProducts();
-    console.log(data);
     res.render('realTimeProducts', { products: data });
 }) 
 
@@ -42,7 +47,36 @@ router.get('/:pid', async (req,res) => {
     }
 })
 
-router.post('/', upload.single('productImage'), async (req,res) => {
+router.post('/socketPOST', upload.single('productImage'), async (req,res) => {
+    console.log(`post /api/products/socketPOST`);
+    try {
+        const { title, description, code, price, stock, category, thumbnails, status } = req.body;
+        
+        // Validar que los campos requeridos estén presentes
+        if (!title || !description || !code || !price || !stock || !category) {
+            throw new Error("Missing required fields: title, description, code, price, stock, category");
+        }
+
+        // agrego el product
+        await productManager.addProduct(title, description, code, price, stock, category, thumbnails || [], status !== undefined ? status : true);
+        
+        // obtengo la lista actualizada
+        const updatedProducts  = await productManager.getProducts();
+
+        //obtengo el socket y emito el evento
+        const io = req.app.get('socketio'); 
+        if (io) {
+            io.emit('updateProducts', updatedProducts);
+            console.log('Evento updateProducts emitido a los clientes');
+        }
+        
+        res.json({status: "Success", message: "Product added successfully"});  
+    } catch (error) {
+        res.status(400).json({status: "Error", error: error.message});
+    }
+})
+
+router.post('/noSocketPOST', upload.single('productImage'), async (req,res) => {
     console.log(`post /api/products`);
     console.log('POST /api/products received');
     console.log('Content-Type header:', req.headers['content-type']);

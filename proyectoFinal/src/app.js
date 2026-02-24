@@ -6,6 +6,7 @@ import cartsRouter from "./routes/carts.routes.js";
 import productsRouter from "./routes/products.routes.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { Server } from 'socket.io';
 
 
 
@@ -33,6 +34,11 @@ app.use('/api/products',productsRouter)
 // CART ROUTES
 app.use('/api/carts',cartsRouter)
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const httpServer = app.listen(PORT, () => { console.log(`Servidor con Express en el puerto ${PORT}`) })
+
+const io = new Server(httpServer);
+app.set('socketio',io);  //seteo esto para que se pueda acceder desde las rutas
+
+io.on('connection',  socket => {
+    console.log('Nuevo cliente conectado con el id ' + socket.id );
+})
