@@ -1,0 +1,4 @@
+ver el tema de handlebar
+en package json tiene que quedar dependencia express handlebar 
+npm install socket.io para sockets, y express-handlebar o algo asi
+bootstrap es la libreria de estetica

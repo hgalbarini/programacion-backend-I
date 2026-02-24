@@ -1,4 +1,5 @@
 import express from "express";
+import handlebars from 'express-handlebars';
 import CartManager from "./CartManager.js";
 import ProductManager from "./ProductManager.js"; 
 import cartsRouter from "./routes/carts.routes.js";
@@ -13,6 +14,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = 8080;
+
+app.engine('handlebars', handlebars.engine() );
+app.set('views', path.join(__dirname, 'views' ) );
+app.set('view engine', 'handlebars');
+
+
 let productManager = new ProductManager();
 let cartManager = new CartManager();
 app.use(express.json());

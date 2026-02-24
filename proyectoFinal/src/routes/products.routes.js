@@ -10,6 +10,13 @@ const cartManager = new CartManager();
 
 let productManager = new ProductManager();
 
+router.get('/realtimeproducts', async (req,res) => {
+    console.log('realtimeproducts');
+    let data = await productManager.getProducts();
+    console.log(data);
+    res.render('realTimeProducts', { products: data });
+}) 
+
 router.get('/', async (req,res) => {
     console.log(`get /api/products`);
     try {
