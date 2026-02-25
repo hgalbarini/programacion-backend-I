@@ -1,30 +1,50 @@
 <div>
-    <h1> realtimeproducts Bienvenido  👋</h1>
+    <h1> Catálogo de Productos realtime 👋</h1>
     <hr>
-    <ul id="productsList">
-    {{#each products}}
-        <li> {{this.title}} - ${{this.price}} </li>
-    {{/each}}
-    </ul>
+    
+    <div id="productsContainer" style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));">
+        {{#each products}}
+            <div class="product-card" style="border: 1px solid #ccc; padding: 10px; border-radius: 8px;">
+                <h3>{{this.title}}</h3>
+                <p><strong>ID:</strong> {{this.id}}</p>
+                <p><strong>Descripción:</strong> {{this.description}}</p>
+                <p><strong>Código:</strong> {{this.code}}</p>
+                <p><strong>Precio:</strong> ${{this.price}}</p>
+                <p><strong>Stock:</strong> {{this.stock}}</p>
+                <p><strong>Categoría:</strong> {{this.category}}</p>
+                <p><strong>Status:</strong> {{#if this.status}}Activo{{else}}Inactivo{{/if}}</p>
+            </div>
+        {{/each}}
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
-        const productsList = document.getElementById('productsList');
+        const container = document.getElementById('productsContainer');
 
         socket.on('updateProducts', (data) => {
-            console.log("Recibida actualización:", data);
+            console.log("Actualizando vista con:", data);
             
-            // Limpiamos la lista actual
-            productsList.innerHTML = '';
+            if (!container) return;
+            container.innerHTML = '';
 
-            // Recorremos el array que llega por socket y creamos los nuevos <li>
             data.forEach(prod => {
-                const li = document.createElement('li');
-                li.textContent = `${prod.title} - $${prod.price}`;
-                productsList.appendChild(li);
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.style = "border: 1px solid #ccc; padding: 10px; border-radius: 8px;";
+                
+                card.innerHTML = `
+                    <h3>${prod.title}</h3>
+                    <p><strong>ID:</strong> ${prod.id}</p>
+                    <p><strong>Descripción:</strong> ${prod.description}</p>
+                    <p><strong>Código:</strong> ${prod.code}</p>
+                    <p><strong>Precio:</strong> $${prod.price}</p>
+                    <p><strong>Stock:</strong> ${prod.stock}</p>
+                    <p><strong>Categoría:</strong> ${prod.category}</p>
+                    <p><strong>Status:</strong> ${prod.status ? 'Activo' : 'Inactivo'}</p>
+                `;
+                container.appendChild(card);
             });
         });
     </script>
-
 </div>

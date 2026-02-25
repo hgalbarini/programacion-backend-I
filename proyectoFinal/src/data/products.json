@@ -1,35 +1,5 @@
 [
   {
-    "id": 0,
-    "title": "",
-    "description": "",
-    "code": "",
-    "price": 0,
-    "stock": 0,
-    "category": "",
-    "thumbnail": []
-  },
-  {
-    "id": 0,
-    "title": "",
-    "description": "",
-    "code": "",
-    "price": 0,
-    "stock": 0,
-    "category": "",
-    "thumbnail": []
-  },
-  {
-    "id": 0,
-    "title": "",
-    "description": "",
-    "code": "",
-    "price": 0,
-    "stock": 0,
-    "category": "",
-    "thumbnail": []
-  },
-  {
     "id": 2,
     "title": "TestTitl2",
     "description": "TestDescription2",
@@ -190,6 +160,17 @@
     "title": "Mousaae Inalámbrico",
     "description": "Mouse ergonómico 2.4GHz",
     "code": "MS0aaa01",
+    "price": 25.5,
+    "stock": 100,
+    "category": "accesorios",
+    "thumbnails": [],
+    "status": true
+  },
+  {
+    "id": 22348,
+    "title": "Mouaaaaaase Inalámbrico",
+    "description": "Mouaaaaaase ergonómico 2.4GHz",
+    "code": "MSzaasda001",
     "price": 25.5,
     "stock": 100,
     "category": "accesorios",
