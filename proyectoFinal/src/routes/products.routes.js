@@ -10,18 +10,6 @@ const cartManager = new CartManager();
 
 let productManager = new ProductManager();
 
-router.get('/home', async (req,res) => {
-    console.log('realtimeproducts');
-    let data = await productManager.getProducts();
-    res.render('home', { products: data });
-}) 
-
-router.get('/realtimeproducts', async (req,res) => {
-    console.log('realtimeproducts');
-    let data = await productManager.getProducts();
-    res.render('realTimeProducts', { products: data });
-}) 
-
 router.get('/', async (req,res) => {
     console.log(`get /api/products`);
     try {
@@ -47,7 +35,7 @@ router.get('/:pid', async (req,res) => {
     }
 })
 
-router.post('/socketPOST', upload.single('productImage'), async (req,res) => {
+router.post('/', upload.single('productImage'), async (req,res) => {
     console.log(`post /api/products/socketPOST`);
     try {
         const { title, description, code, price, stock, category, thumbnails, status } = req.body;
@@ -115,10 +103,19 @@ router.put('/:pid', async (req,res) => {
 })
 
 router.delete('/:pid', async (req,res) => {
-    console.log(`delete /api/products/:pid`);
+    console.log(`delete /api/products/:pid/socketDELETE`);
     const {pid} = req.params;
     try {
         await productManager.deleteProduct(pid);
+        // obtengo la lista actualizada
+        const updatedProducts  = await productManager.getProducts();
+        //obtengo el socket y emito el evento
+        const io = req.app.get('socketio'); 
+        if (io) {
+            io.emit('updateProducts', updatedProducts);
+            console.log('Evento updateProducts emitido a los clientes');
+        }
+        
         res.json({status: "Success", message: `Product with id ${pid} deleted successfully`});
     } catch (error) {
         res.status(404).json({status: "Error", error: error.message});

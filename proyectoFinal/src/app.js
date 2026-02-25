@@ -42,3 +42,15 @@ app.set('socketio',io);  //seteo esto para que se pueda acceder desde las rutas
 io.on('connection',  socket => {
     console.log('Nuevo cliente conectado con el id ' + socket.id );
 })
+
+app.get('/home', async (req,res) => {
+    console.log('home');
+    let data = await productManager.getProducts();
+    res.render('home', { products: data });
+}) 
+
+app.get('/realtimeproducts', async (req,res) => {
+    console.log('realtimeproducts');
+    let data = await productManager.getProducts();
+    res.render('realTimeProducts', { products: data });
+}) 

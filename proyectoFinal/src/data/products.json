@@ -43,19 +43,6 @@
     ]
   },
   {
-    "id": 22332,
-    "title": "TestTitl2",
-    "description": "TestDescription2",
-    "code": "TestCode2",
-    "price": 12,
-    "stock": 12,
-    "category": "TestCategory2",
-    "thumbnail": [
-      "TestThumbnail12",
-      "TestThumbnail22"
-    ]
-  },
-  {
     "id": 22333,
     "title": "Nuevo Producto",
     "description": "Descripción del nuevo producto",
@@ -181,6 +168,28 @@
     "title": "test Inalámbrico",
     "description": "Mouse ergonómico 2.4GHz",
     "code": "MS001sstest3ssssaa",
+    "price": 25.5,
+    "stock": 100,
+    "category": "accesorios",
+    "thumbnails": [],
+    "status": true
+  },
+  {
+    "id": 22345,
+    "title": "nuevo producto Inalámbrico",
+    "description": "Mouse ergonómico 2.4GHz",
+    "code": "nuevo producto",
+    "price": 25.5,
+    "stock": 100,
+    "category": "accesorios",
+    "thumbnails": [],
+    "status": true
+  },
+  {
+    "id": 22347,
+    "title": "Mousaae Inalámbrico",
+    "description": "Mouse ergonómico 2.4GHz",
+    "code": "MS0aaa01",
     "price": 25.5,
     "stock": 100,
     "category": "accesorios",
