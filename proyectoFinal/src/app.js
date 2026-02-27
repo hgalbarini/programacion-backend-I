@@ -7,6 +7,7 @@ import productsRouter from "./routes/products.routes.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Server } from 'socket.io';
+import viewsRouter from './routes/views.router.js';
 
 
 
@@ -26,6 +27,8 @@ let cartManager = new CartManager();
 app.use(express.json());
 app.use(express.static(path.join(__dirname,'..','public')));
 
+//VIEWS ROUTER
+app.use('/', viewsRouter);
 
 // PRODUCT ROUTES
 
@@ -43,14 +46,4 @@ io.on('connection',  socket => {
     console.log('Nuevo cliente conectado con el id ' + socket.id );
 })
 
-app.get('/home', async (req,res) => {
-    console.log('home');
-    let data = await productManager.getProducts();
-    res.render('home', { products: data });
-}) 
 
-app.get('/realtimeproducts', async (req,res) => {
-    console.log('realtimeproducts');
-    let data = await productManager.getProducts();
-    res.render('realTimeProducts', { products: data });
-}) 

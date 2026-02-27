@@ -28,3 +28,10 @@ Si se desea hacer la conexión de socket emits con HTTP, deberás buscar la form
 
 
 simplemente tenemos que agregar lo visto en und 5 y6 nomas 
+
+
+criterio evaluacion
+
+
+En la vista de "/realtimeProducts" se visualizan correctamente todos los productos presentes en el archivo "products.json". Cada producto tiene un botón para ser eliminado y la vista tiene un formulario para crear productos. Tanto al eliminar como al crear productos se actualiza la vista de los productos en tiempo real mediante websocket. En el socket del servidor se utiliza el ProductManager.js para la gestión de productos.
+Realizado
